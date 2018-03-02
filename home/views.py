@@ -5,4 +5,4 @@ def index(request):
     return HttpResponse("ควย-")
 
 def home(request):
-    return HttpResponse("บ้าน")
+    return HttpResponse("บ้านนนนนนนนน")

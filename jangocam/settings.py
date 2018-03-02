@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'graphene_django',
     'links',
     'home',
-    'users'
+    'users',
+    'polls.apps.PollsConfig'
 ]
 
 MIDDLEWARE = [
