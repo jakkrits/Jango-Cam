@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="face recognition system">
+    <meta name="author" content="Jakkrit S.">
+
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'home/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'home/css/style.css' %}" rel="stylesheet">
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'home/js/jquery.min.js' %}"></script>
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,600" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home/css/fontawesome.min.css' %}" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'home/images/favicon/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'home/images/favicon/favicon-32x32.png'%}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'home/images/favicon/favicon-16x16.png'%}">
+    <link rel="manifest" href="{% static 'home/images/favicon/site.webmanifest'%}">
+    <link rel="mask-icon" href="{% static 'home/images/favicon/safari-pinned-tab.svg'%}" color="#5bbad5">
+    <link rel="shortcut icon" href="{% static 'home/images/favicon/favicon.ico'%}">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="msapplication-config" content="{% static 'home/images/favicon/browserconfig.xml'%}">
+    <meta name="theme-color" content="#ffffff">
+  </head>
+  <body>
+
+    {% block content %}
+    {% endblock %}
+    <footer style="background-color: rgb(28, 28, 28);padding:2em 0;margin-top:1em;">
+      <p class="text-center" style="margin-bottom:0;color:#fff">Created by Manjil Tamang and Prabin Shrestha as a final project for Artificial Intellience Module.</p>
+    </footer>
+    <!-- Custom scripts for this template -->
+    <script src="{% static 'home/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'home/js/particles.min.js' %}" ></script>
+    <script src="{% static 'home/js/script.js' %}"></script>
+
+  </body>
+
+</html>
