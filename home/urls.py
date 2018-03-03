@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='home_index'),
-    path('detection/', views.detection, name='detection')
+    path('detection_hardcode/', views.detection_hardcode, name='detection_hardcode'),
+    path('streaming/', views.streaming, name='streaming')
 ]

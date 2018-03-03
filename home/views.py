@@ -1,13 +1,18 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 
 import os
 import cv2
 import face_recognition
 
+import re
+import mimetypes
+from wsgiref.util import FileWrapper
+
 from .utils.camera import VideoCamera
+
 
 def index(request):
     return render(request, 'home/index.html')
@@ -19,21 +24,86 @@ OBAMA_JPG = "{base_path}/obama.jpg".format(
 BIDEN_JPG = "{base_path}/biden.jpg".format(
     base_path=os.path.abspath(os.path.dirname(__file__)))
 
+JAKKRIT_JPG = "{base_path}/jakkrit.jpg".format(
+    base_path=os.path.abspath(os.path.dirname(__file__)))
 
 def gen(camera):
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
-                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
 
 @csrf_exempt
 def detection(request):
-
     return HttpResponse("Video")
 
 
+range_re = re.compile(r'bytes\s*=\s*(\d+)\s*-\s*(\d*)', re.I)
+
+
+class RangeFileWrapper(object):
+    def __init__(self, filelike, blksize=8192, offset=0, length=None):
+        self.filelike = filelike
+        self.filelike.seek(offset, os.SEEK_SET)
+        self.remaining = length
+        self.blksize = blksize
+
+    def close(self):
+        if hasattr(self.filelike, 'close'):
+            self.filelike.close()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.remaining is None:
+            # If remaining is None, we're reading the entire file.
+            data = self.filelike.read(self.blksize)
+            if data:
+                return data
+            raise StopIteration()
+        else:
+            if self.remaining <= 0:
+                raise StopIteration()
+            data = self.filelike.read(min(self.remaining, self.blksize))
+            if not data:
+                raise StopIteration()
+            self.remaining -= len(data)
+            return data
+
+
+TEST_VIDEO_PATH = '{base_path}/hamilton_clip.mp4'.format(base_path=os.path.abspath(os.path.dirname(__file__)))
+TEST_STREAM_PATH = 'http://192.168.1.108:4040/videostream.cgi?user=admin&pwd=888888'
+
 @csrf_exempt
-def detection_old(request):
+# https://stackoverflow.com/questions/33208849/python-django-streaming-video-mp4-file-using-httpresponse
+def streaming(request, path=TEST_VIDEO_PATH):
+    range_header = request.META.get('HTTP_RANGE', '').strip()
+    range_match = range_re.match(range_header)
+    size = os.path.getsize(path)
+    content_type, encoding = mimetypes.guess_type(path)
+    content_type = content_type or 'application/octet-stream'
+    if range_match:
+        first_byte, last_byte = range_match.groups()
+        first_byte = int(first_byte) if first_byte else 0
+        last_byte = int(last_byte) if last_byte else size - 1
+        if last_byte >= size:
+            last_byte = size - 1
+        length = last_byte - first_byte + 1
+        resp = StreamingHttpResponse(RangeFileWrapper(open(path, 'rb'), offset=first_byte, length=length), status=206,
+                                     content_type=content_type)
+        resp['Content-Length'] = str(length)
+        resp['Content-Range'] = 'bytes %s-%s/%s' % (first_byte, last_byte, size)
+    else:
+        resp = StreamingHttpResponse(FileWrapper(open(path, 'rb')), content_type=content_type)
+        resp['Content-Length'] = str(size)
+    resp['Accept-Ranges'] = 'bytes'
+    return resp
+
+
+@csrf_exempt
+def detection_hardcode(request):
     video_capture = cv2.VideoCapture(0)
     # Load a sample picture and learn how to recognize it.
     obama_image = face_recognition.load_image_file(OBAMA_JPG)
@@ -43,14 +113,19 @@ def detection_old(request):
     biden_image = face_recognition.load_image_file(BIDEN_JPG)
     biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
 
+    jakkrit_image = face_recognition.load_image_file(JAKKRIT_JPG)
+    jakkrit_face_encoding = face_recognition.face_encodings(jakkrit_image)[0]
+
     # Create arrays of known face encodings and their names
     known_face_encodings = [
         obama_face_encoding,
-        biden_face_encoding
+        biden_face_encoding,
+        jakkrit_face_encoding
     ]
     known_face_names = [
         "Barack Obama",
-        "Joe Biden"
+        "Joe Biden",
+        "jakkrit"
     ]
 
     # Initialize some variables
@@ -59,7 +134,7 @@ def detection_old(request):
     face_names = []
     process_this_frame = True
 
-    while False:
+    while True:
         # Grab a single frame of video
         ret, frame = video_capture.read()
 
