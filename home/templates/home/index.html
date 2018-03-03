@@ -10,7 +10,7 @@
 box-shadow:         2px 2px 15px 0px rgba(0, 3, 0, 0.7);">
     <div class="col-lg-12">
       <a href="/admin"><h5 class="text-right"><i class="fa fa-user-circle" aria-hidden="true"></i> Admin Panel</h5></a>
-      <h1 class="text-center section-title" style="margin-bottom:2em">Smart Search with Face Recognition.</h1>
+      <h1 class="text-center section-title" style="margin-bottom:2em">Face Recognition | Archanai Tech</h1>
     </div>
     <style>
       h4{
@@ -56,7 +56,7 @@ box-shadow:         2px 2px 15px 0px rgba(0, 3, 0, 0.7);">
           <form id="target" action="detect_image" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <label for="file-input" style="cursor:pointer">
-              <img src="{% static 'img/photo.png' %}" class="img-responsive" />
+              <img src="{% static 'home/images/photo.png' %}" class="img-responsive" />
             </label>
             <input id="file-input" name="userImage" type="file" style="display: none;" accept="image/*"/>
           </form>
@@ -68,23 +68,23 @@ box-shadow:         2px 2px 15px 0px rgba(0, 3, 0, 0.7);">
           <h4 class="text-center">Detect Image</h4>
         </div>
         <div class="col-md-6">
-          <a href="eigen_train"><img src="{% static 'img/trainer.png' %}" class="img-responsive" /></a>
+          <a href="eigen_train"><img src="{% static 'home/images/trainer.png' %}" class="img-responsive" /></a>
           <h4 class="text-center">Train the Classifier</h4>
         </div>
       </div>
       <div class="col-md-7">
         <h3 class="text-center">With OpenCV, LBPH</h3>
         <div class="col-md-4">
-          <a href="/detect"><img src="{% static 'img/webcam.png' %}" class="img-responsive" /></a>
+          <a href="/detect"><img src="{% static 'home/images/webcam.png' %}" class="img-responsive" /></a>
           <h4 class="text-center">Detect By Webcam</h4>
         </div>
         <div class="col-md-4">
-          <a href="/trainer"><img src="{% static 'img/trainer.png' %}" class="img-responsive" /></a>
+          <a href="/trainer"><img src="{% static 'home/images/trainer.png' %}" class="img-responsive" /></a>
           <h4 class="text-center">Train The Classifier</h4>
         </div>
         <div class="col-md-4">
           <button type="button" style="background:transparent;border:none" data-toggle="modal" data-target="#myModal">
-            <img src="{% static 'img/add.png' %}" class="img-responsive" />
+            <img src="{% static 'home/images/add.png' %}" class="img-responsive" />
           </button>
           <h4 class="text-center">Create Dataset</h4>
         </div>
