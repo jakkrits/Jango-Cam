@@ -12,9 +12,12 @@ html, body {
 
 #particles-js{
     background-image: url('css_images/bg.jpg');
-    background-size: contain;
+    background-size: cover;
     height: 100vh;
-    position:fixed;
+    resize: both;
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
     width: 100%;
     z-index: -100;
 }
