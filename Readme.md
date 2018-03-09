@@ -24,6 +24,7 @@ python3.6 -m venv djangoql
 source djangoql/bin/activate.fish
 pip install django==2.0.3 graphene==2.0.1 graphene-django==2.0.0 django-filter==1.1.0 django-graphql-jwt==0.1.5 Pillow==5.0 Faker
 pip install face_recognition
+pip install -r requirements.txt
 ```
 
 Particularly on macos, may need to install opencv-contrib
