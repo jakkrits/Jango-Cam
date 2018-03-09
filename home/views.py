@@ -27,6 +27,7 @@ BIDEN_JPG = "{base_path}/biden.jpg".format(
 JAKKRIT_JPG = "{base_path}/jakkrit.jpg".format(
     base_path=os.path.abspath(os.path.dirname(__file__)))
 
+
 def gen(camera):
     while True:
         frame = camera.get_frame()
